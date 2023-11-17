@@ -1,5 +1,5 @@
 # best-friend-back
-Backend for my best-friend aplication
+Backend for my best-friend application
 
 ### Working with
 * Python - FastAPI
@@ -7,11 +7,10 @@ Backend for my best-friend aplication
 * AMQP - RabbitMQ
 * Docker
 * K8s
-* WSL
 
 
 ### To-do
-- [  ] Create a virtual environment
+- [ :white_check_mark: ] Create a virtual environment -> bestfriend
 - [  ] Create CRUD
 - [  ] Put LOGs in every function
 - [  ] Create layer of messages between the request and the database
