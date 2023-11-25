@@ -3,7 +3,7 @@ import json
 
 def send_payload_user(user):
     try:
-        connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+        connection = pika.BlockingConnection(pika.ConnectionParameters(host='rabbitmq'))
         channel = connection.channel()
         channel.queue_declare(queue='user')
 
@@ -19,7 +19,7 @@ def send_payload_user(user):
     
 def send_payload_pets(pets):
     try:
-        connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+        connection = pika.BlockingConnection(pika.ConnectionParameters(host='rabbitmq'))
         channel = connection.channel()
         channel.queue_declare(queue='pets')
 
@@ -35,7 +35,7 @@ def send_payload_pets(pets):
     
 def send_payload_exams(exams):
     try:
-        connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+        connection = pika.BlockingConnection(pika.ConnectionParameters(host='rabbitmq'))
         channel = connection.channel()
         channel.queue_declare(queue='exams')
 
@@ -51,7 +51,7 @@ def send_payload_exams(exams):
     
 def send_payload_medicineVaccine(medicineVaccine):
     try:
-        connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+        connection = pika.BlockingConnection(pika.ConnectionParameters(host='rabbitmq'))
         channel = connection.channel()
         channel.queue_declare(queue='medicineVaccine')
 

@@ -15,6 +15,7 @@ logger = logging.getLogger('foo-logger')
 
 @app.get("/")
 async def root():
+    
     return {
         "status":"Success",
         "data": "Welcome to the bestfriend API"
@@ -224,10 +225,10 @@ async def post_medicine_vaccine(request_medicine_vaccine: Request_MedicineVaccin
         medicine_vaccine_json = request_medicine_vaccine
 
         medicine_vaccine = {
+            "pet_id": medicine_vaccine_json.pet_id,
             "type_of": medicine_vaccine_json.type_of,
             "name": medicine_vaccine_json.name,
-            "date": medicine_vaccine_json.date,
-            "pet_id": medicine_vaccine_json.pet_id
+            "date": medicine_vaccine_json.date
         }
 
         send_payload_medicineVaccine(medicine_vaccine)

@@ -10,7 +10,7 @@ def send_db(args):
             drivername='postgresql+psycopg2',
             username='postgres',
             password='banco',
-            host='localhost',
+            host='postgres',
             database='bestfriend',
             port=5432
         )
@@ -19,7 +19,7 @@ def send_db(args):
         Session = sessionmaker(bind=engine)
         session = Session()
 
-        connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+        connection = pika.BlockingConnection(pika.ConnectionParameters(host='rabbitmq'))
         channel = connection.channel()
 
 
@@ -100,7 +100,7 @@ def send_db(args):
                     callback(None, method_frame, None, body)
                     break
             if(class_type == 'medVacc'):
-                method_frame, header_frame, body = channel.basic_get(queue='medVacc',auto_ack=True)
+                method_frame, header_frame, body = channel.basic_get(queue='medicineVaccine',auto_ack=True)
 
                 if method_frame:
                     callback(None, method_frame, None, body)
