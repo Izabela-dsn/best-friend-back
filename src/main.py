@@ -220,7 +220,7 @@ async def get_medicines_vaccines_for_all_pets():
 async def post_medicine_vaccine(request_medicine_vaccine: Request_MedicineVaccine):
     try:
         logger.info("Creating medicine or vaccine")
-        class_type = 'medicine-vaccine'
+        class_type = 'medVacc'
         medicine_vaccine_json = request_medicine_vaccine
 
         medicine_vaccine = {
@@ -258,7 +258,7 @@ async def update_pet(pet_id: int, request_pet: Request_Pets):
             "weight": pet_json.weight
         }
 
-        pet = session.query(Pets) #
+        
         pet = session.query(Pets).filter(Pets.id == pet_id).first()    #query
         if not pet:  #query
             logger.error("Pet not found")
@@ -272,11 +272,7 @@ async def update_pet(pet_id: int, request_pet: Request_Pets):
         session.add(pet)
         session.commit()
  
-        pet.owner_id = pet_json.user_id
-        pet.name = pet_json.name
-        pet.years = pet_json.years_old
-        pet.weight = pet_json.weight
-
+        
         return {
             "status": 'success',
             "data": pet_json
@@ -302,8 +298,7 @@ async def update_exam(exam_id: int, request_exam: Request_Exams):
             "date": exam_json.date
         }
 
-        # Lógica de atualização do exame...
-        exam = session.query(Exams)
+
         exam = session.query(Exams).filter(Exams.id == exam_id).first()
         if not exam:
             logger.error("Exam not found")
@@ -326,11 +321,10 @@ async def update_exam(exam_id: int, request_exam: Request_Exams):
         raise HTTPException(status_code=500, detail=f"Failed, {str(e)}")
         
 
-# @app.put("/medicines-vaccines/{protocol_id}")
-@app.put("/medicines-vaccines/{protocol_id}")
-async def update_medicine_vaccine(protocol_id: int, request_medicine_vaccine: Request_MedicineVaccine):
+@app.put("/medicines-vaccines/{medicine_vaccine_id}")
+async def update_medicine_vaccine(medicine_vaccine_id: int, request_medicine_vaccine: Request_MedicineVaccine):
     try:
-        logger.info(f"Updating medicine or vaccine with ID: {protocol_id}")
+        logger.info(f"Updating medicine or vaccine with ID: {medicine_vaccine_id}")
         class_type = 'medicine-vaccine'
         medicine_vaccine_json = request_medicine_vaccine
 
@@ -342,10 +336,10 @@ async def update_medicine_vaccine(protocol_id: int, request_medicine_vaccine: Re
         }
 
         medicine_vaccine = session.query(medicine_vaccine)
-        medicine_vaccine = session.query(medicine_vaccine).filter(Exams.id == protocol_id).first()
+        medicine_vaccine = session.query(medicine_vaccine).filter(Exams.id == medicine_vaccine_id).first()
         if not medicine_vaccine:
             logger.error("medicine or vaccine not found")
-            raise HTTPException(status_code=404, detail=f"medicine or vaccine {protocol_id} not found")
+            raise HTTPException(status_code=404, detail=f"medicine or vaccine {medicine_vaccine_id} not found")
 
         medicine_vaccine.place = medicine_vaccine_json.place
         medicine_vaccine.name_exam = medicine_vaccine_json.name_exam
@@ -415,37 +409,26 @@ async def delete_exam(exam_id: int):
     
 
 # @app.delete("/medicines-vaccines/{protocol_id}")
-@app.delete("/medicines-vaccines/{protocol_id}")
-async def delete_medicine_vaccine(protocol_id: int):
+@app.delete("/medicines-vaccines/{medicine_vaccine_id}")
+async def delete_medicine_vaccine(medicine_vaccine_id: int):
     try:
-        logger.info(f"Deleting medicine or vaccine with ID: {protocol_id}")
+        logger.info(f"Deleting medicine or vaccine with ID: {medicine_vaccine_id}")
         class_type = 'medicine-vaccine'
 
-        protocol_query = session.query(delete_medicine_vaccine).filter(Protocol.id == protocol_id).first()
-        if not protocol_query:
+        medicine_vaccine_query = session.query(delete_medicine_vaccine).filter(delete_medicine_vaccine.id == medicine_vaccine_id).first() ##
+        if not medicine_vaccine_query:
             logger.error("Exam not found")
             raise HTTPException(status_code=404, detail="exam not found")
               
-        session.delete(protocol_id)    
+        session.delete(medicine_vaccine_id)    
         session.commit()
 
         return {
             "status": 'success',
-            "data": f"Medicine or vaccine with ID {protocol_id} deleted successfully"
+            "data": f"Medicine or vaccine with ID {medicine_vaccine_id} deleted successfully"
         }
     
     except Exception as e:
         logger.error(f"Failed to delete medicine or vaccine: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Failed, {str(e)}")
 
-
-"""
-@app.get("users/pets/medicines-vaccines")
-@app.post("/medicines-vaccines")
-@app.put("/pets/{pet_id}")
-@app.put("/exams/{exam_id}")
-@app.put("/medicines-vaccines/{protocol_id}")
-@app.delete("/pets/{pet_id}")
-@app.delete("/exams/{exam_id}")
-@app.delete("/medicines-vaccines/{protocol_id}")
-"""
