@@ -1,21 +1,27 @@
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.engine import URL
 from sqlalchemy.orm import declarative_base, sessionmaker, relationship
+from sqlalchemy_utils import database_exists, create_database
 
 url = URL.create(
     drivername='postgresql+psycopg2',
     username='postgres',
     password='banco',
-    host='localhost',
+    host='postgres',
     database='bestfriend',
     port=5432
 )
 
-engine  = create_engine(url)
+if not database_exists(url):
+    create_database(url)
+
+engine = create_engine(url)
+
 Session = sessionmaker(bind=engine)
 session = Session()
 
 Base = declarative_base()
+Base.metadata.create_all(engine)
 
 class User(Base):
     __tablename__ = 'user'
